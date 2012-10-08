@@ -181,6 +181,9 @@ module Delayed
     end
 
     def run(job)
+      #JOSHBLOUR FORK - loads skytap api_user for use in background jobs
+      Skytap.api_user = Skytap.new(ENV['SKYTAP_USER'], ENV['SKYTAP_PASS'],nil, nil, nil)
+
       runtime =  Benchmark.realtime do
         Timeout.timeout(self.class.max_run_time.to_i) { job.invoke_job }
         job.destroy
